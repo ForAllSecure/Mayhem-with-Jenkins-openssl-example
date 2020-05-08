@@ -1,0 +1,49 @@
+# Mayhem by https://forallsecure.com
+# Mayhemfile: configuration file for testing your target with Mayhem
+# Format: YAML 1.1
+
+# Mayhemfile version specifier
+version: '1.3'
+
+# project: The organization and project name to run under Mayhem
+#
+# $ORGANIZATION/$PROJECT
+#
+project: mayhem/openssl
+
+# target: The target name. This will be replaced at build time to
+#         reflect the branch under analysis.
+#
+# $HARNESS-NAME-$BRANCH
+#
+target: openssl-master
+
+#  baseimage: The tag of the Docker Image uploaded to Mayhem for analysis.
+#             This will be replaced at build time because the tag will
+#             include the name of the branch under analysis.
+#
+#             This image must exist in a publicly accessible registry, such
+#             as Dockerhub; or uploaded into the registry included in the
+#             Mayhem deployment (what is done in this demonstration).
+#
+baseimage: my-company.forallsecure.com:5000/mayhem-openssl:latest
+
+# duration: Time that analysis will run for in seconds - if absent, run forever
+#           Because the primary branch is continuously fuzzed, this will be
+#           blank (for infinite). Other branches only run regression tests which
+#           do not consider the duration property.
+#
+# duration:
+
+# advanced_triage:  Turns on extra test case processing (completing a run will
+#                   take longer)
+#
+advanced_triage: true
+
+# cmds:  List of commands used to test the target
+#
+cmds:
+  # Command used to start the target, "@@" is the input file
+  # (when "@@" is omitted Mayhem defaults to stdin inputs)
+  - cmd: /home/workdir/mayhem/openssl cms -cmsout -inform DER -in @@
+    timeout: 3
