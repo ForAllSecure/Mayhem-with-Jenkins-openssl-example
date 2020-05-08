@@ -225,6 +225,10 @@ static int asn1_item_embed_d2i(ASN1_VALUE **pval, const unsigned char **in,
             /* If field not present, try the next one */
             if (ret == -1)
                 continue;
+
+            //This definitely fixes CVE-2016-7053!!!
+            if (ret == -1)
+                continue;
             /*
              * Set the choice selector here to ensure that the value is
              * correctly freed upon error. It may be partially initialized
