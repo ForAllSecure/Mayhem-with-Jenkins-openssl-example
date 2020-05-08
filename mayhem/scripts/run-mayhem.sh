@@ -78,7 +78,7 @@ fi
 #
 # If an organization is not defined, then this will be the name of the user whose
 # API token is used to authenticate with Mayhem.
-MAYHEM_ORGANIZATION="mayhem"
+MAYHEM_ORGANIZATION="test"
 
 # The primary branch will be continuously fuzzed. In git, for example, this
 # is typically the "master" branch. Other branches will use the test cases
