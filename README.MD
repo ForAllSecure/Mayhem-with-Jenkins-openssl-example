@@ -76,10 +76,16 @@ replacing the `@@` symbol with fuzzing content. A seed is included in
 
 ## Jenkins Pipeline
 
-This example makes use of [Jenkins Pipeline](https://www.jenkins.io/doc/book/pipeline/)
-to coordinate the build and Mayhem integration. There is nothing in the build
-flow that requires Jenkins. The same concepts can be applied to different build
-tools.
+This example makes use of a [Jenkins Multibranch Pipeline](https://www.jenkins.io/doc/book/pipeline/multibranch/#creating-a-multibranch-pipeline)
+to coordinate build and Mayhem integration. The Multibranch Pipeline sets
+the `BRANCH_NAME` environment variable to whichever branch is being built by
+Jenkins. This is used to distinguish between a continuous fuzzing run on the
+`mater` branch and regression test runs on other branches. Note that the
+`BRANCH_NAME` variable is not set by default on a standard Jenkins Pipeline
+job.
+
+There is nothing in the build flow that _requires_ Jenkins. The same concepts 
+can be applied to different build tools.
 
 The [Jenkinsfile](Jenkinsfile) is located in the root of the project and defines
 the build pipeline used to run Mayhem. The bulk of the work to run Mayhem and
