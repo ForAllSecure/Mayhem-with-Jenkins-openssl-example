@@ -80,7 +80,7 @@ This example makes use of a [Jenkins Multibranch Pipeline](https://www.jenkins.i
 to coordinate build and Mayhem integration. The Multibranch Pipeline sets
 the `BRANCH_NAME` environment variable to whichever branch is being built by
 Jenkins. This is used to distinguish between a continuous fuzzing run on the
-`mater` branch and regression test runs on other branches. Note that the
+`master` branch and regression test runs on other branches. Note that the
 `BRANCH_NAME` variable is not set by default on a standard Jenkins Pipeline
 job.
 
