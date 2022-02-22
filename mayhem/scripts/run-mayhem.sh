@@ -97,7 +97,7 @@ MAYHEM_PRIMARY_TARGET="openssl-${PRIMARY_BRANCH}"
 CLI_NAME=mayhem
 CLI_URL="${MAYHEM_URL}/cli/Linux/${CLI_NAME}"
 CLI="${ROOT}/${CLI_NAME}"
-wget -q -O "${CLI_NAME}" "${CLI_URL}"
+wget --no-check-certificate -O "${CLI}" "${CLI_URL}"
 chmod a+x "${CLI}"
 ${CLI} --version
 
