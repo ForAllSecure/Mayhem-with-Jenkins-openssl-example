@@ -2,6 +2,8 @@
 
 To get started with this example, you will need to fork this repository and complete the following process in Jenkins:
 
+> **Note:** You will also need to create a `mayhem` organization in the Mayhem UI prior to executing the pipeline, as the [run-mayhem.sh](mayhem/scripts/run-mayhem.sh) script uses a Mayhem Organization as the target run namespace.
+
 ## Jenkins Setup
 
 1. Create a new multibranch pipeline `openssl-pipeline` in Jenkins by accessing a Jenkins instance, and via the dashboard, go to *New Item* > *Multibranch Pipeline* in the left-hand pane.
