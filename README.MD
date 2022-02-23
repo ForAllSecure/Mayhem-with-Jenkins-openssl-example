@@ -98,7 +98,6 @@ Mayhem will fuzz the  `openssl` binary using the command described
 replacing the `@@` symbol with fuzzing content. A seed is included in
 [mayhem/corpus](mayhem/corpus) to help find the demonstrated defect.
 
-
 ## Jenkins Pipeline
 
 This example makes use of [Jenkins Pipeline](https://www.jenkins.io/doc/book/pipeline/)
