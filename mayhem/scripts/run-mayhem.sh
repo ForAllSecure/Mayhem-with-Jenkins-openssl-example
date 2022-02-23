@@ -97,7 +97,7 @@ MAYHEM_PRIMARY_TARGET="openssl-${PRIMARY_BRANCH}"
 CLI_NAME=mayhem
 CLI_URL="${MAYHEM_URL}/cli/Linux/${CLI_NAME}"
 CLI="${ROOT}/${CLI_NAME}"
-wget -q -O "${CLI_NAME}" "${CLI_URL}"
+wget --no-check-certificate -O "${CLI}" "${CLI_URL}"
 chmod a+x "${CLI}"
 ${CLI} --version
 
@@ -131,10 +131,27 @@ sed -i "s|baseimage:.*|baseimage: $IMAGE_TAG|g" Mayhemfile
 ######################################################################
 # Clear pending runs
 #
+# Fetch the pending or run in progress. These must be stopped for a new run
+# to be started for the same target.
+#
+#  * mayhem show                         << get Mayhem runs
+#  * -n ${MAYHEM_ORGANIZATION}              << limit search to projects in the specified organization
+#  * --format csv                        << display in csv format
+#  * "^openssl/${MAYHEM_TARGET}(?i)/\d+" <<  case-insensitive regex filter by project/target/[run #]
+#  * grep -E "pending|running"           << filter for pending or running runs
+#  * cut -d"," -f1                       << get the run ID from the left-most column in the output
+#  * || true                             << Do not exit the script if no runs match
+######################################################################
+RUNS_TO_STOP=$(${CLI} show -n ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true)
+
 # Stop ALL running or pending runs for the selected target. This is required
 # so that the new run is not pending behind previoulsy queued run(s).
-######################################################################
-${CLI} stop -n ${MAYHEM_ORGANIZATION} "openssl/${MAYHEM_TARGET}" || true
+if [[ -n "${RUNS_TO_STOP}" ]]; then
+    for run in $RUNS_TO_STOP
+    do
+        ${CLI} stop -n ${MAYHEM_ORGANIZATION} "${run}" || true
+    done
+fi
 
 ######################################################################
 # Start a new run

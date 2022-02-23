@@ -3,7 +3,7 @@
 # Format: YAML 1.1
 
 # Mayhemfile version specifier
-version: '1.3'
+version: '1.16'
 
 # project: The organization and project name to run under Mayhem
 #
