@@ -1,3 +1,29 @@
+# Getting Started
+
+To get started with this example, you will need to fork this repository and complete the following process in Jenkins:
+
+> **Note:** You will also need to create a `mayhem` organization in the Mayhem UI prior to executing the pipeline, as the [run-mayhem.sh](mayhem/scripts/run-mayhem.sh) script uses a Mayhem Organization as the target run namespace.
+
+## Jenkins Setup
+
+1. Create a new multibranch pipeline `openssl-pipeline` in Jenkins by accessing a Jenkins instance, and via the dashboard, go to *New Item* > *Multibranch Pipeline* in the left-hand pane.
+2. Within the multibranch pipeline configuration, set your GitHub source to your forked repository for this openssl pipeline example. Make sure to set the correct repository HTTPS URL and credentials.
+3. Click on *Scan Repository Now*, you should see two branches discovered in the pipeline: `master` and `CVE-2016-7053-FIXED`.
+
+## Execute Continuous Fuzzing
+
+For Continuous Fuzzing, Mayhem will fuzz the latest version of your software residing on the primary (master) branch, and by default, set Continuous Fuzzing runs with an infinite duration—only stopping a current Mayhem run and beginning a new Mayhem run when a new commit has been pushed to the primary branch. Thus, the name "Continuous Fuzzing".
+
+1. Navigate to the `master` branch for the `openssl-pipeline` Jenkins project and click on *Build with Parameters*. Input the URL of your mayhem instance in the form of `my-company.forallsecure.com` (without any http or https prefixes) and the ID of the Jenkins credentials that contain the corresponding Mayhem API token (you may need to set this up separately). When ready, click on the *Build* button to execute the pipeline for the `master` branch.
+2. The new pipeline for the `master` branch should now build the openssl Docker target and upload the corresponding Docker image to the specified Mayhem instance. A new Mayhem run for the bugged `openssl-master` target will then execute and find the underlying defects.
+
+## Execute Regression Testing
+
+For Regression Testing, Mayhem will execute regression tests on new changes or code using previously generated crashing test cases found during Continuous Fuzzing to determine if known defects have been fixed.
+
+1. Navigate to the `CVE-2016-7053-FIXED` branch for the `openssl-pipeline` Jenkins project and click on *Build with Parameters*. Input the URL of your mayhem instance in the form of `my-company.forallsecure.com` (without any http or https prefixes) and the ID of the Jenkins credentials that contain the corresponding Mayhem API token (you may need to set this up separately). When ready, click on the *Build* button to execute the pipeline for the `CVE-2016-7053-FIXED` branch.
+2. The new pipeline for the `CVE-2016-7053-FIXED` branch should now build the openssl Docker target and upload the corresponding Docker image to the specified Mayhem instance with the same test corpus generated from the `openssl-master` target. A Mayhem run for the fixed `openssl-cve-2016-7053-fixed` target will then execute to ensure that defects have been resolved.
+
 # Mayhem Example (openssl)
 
 This repository has been forked from the official [openssl repository](https://github.com/openssl/openssl)
@@ -72,7 +98,6 @@ Mayhem will fuzz the  `openssl` binary using the command described
 `openssl cms -cmsout...`. The input will be passed into the command by Mayhem,
 replacing the `@@` symbol with fuzzing content. A seed is included in
 [mayhem/corpus](mayhem/corpus) to help find the demonstrated defect.
-
 
 ## Jenkins Pipeline
 
