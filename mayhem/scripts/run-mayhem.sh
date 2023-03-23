@@ -149,7 +149,7 @@ RUNS_TO_STOP=$(${CLI} show -n ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MA
 if [[ -n "${RUNS_TO_STOP}" ]]; then
     for run in $RUNS_TO_STOP
     do
-        ${CLI} stop -n ${MAYHEM_ORGANIZATION} "${run}" || true
+        ${CLI} stop --owner ${MAYHEM_ORGANIZATION} "${run}" || true
     done
 fi
 
