@@ -2,9 +2,6 @@
 # Mayhemfile: configuration file for testing your target with Mayhem
 # Format: YAML 1.1
 
-# Mayhemfile version specifier
-version: '1.16'
-
 # project: The organization and project name to run under Mayhem
 #
 # $ORGANIZATION/$PROJECT
@@ -26,7 +23,7 @@ target: openssl-master
 #             as Dockerhub; or uploaded into the registry included in the
 #             Mayhem deployment (what is done in this demonstration).
 #
-baseimage: my-company.forallsecure.com:5000/mayhem-openssl:latest
+image: my-company.forallsecure.com:5000/mayhem-openssl:latest
 
 # duration: Time that analysis will run for in seconds - if absent, run forever
 #           Because the primary branch is continuously fuzzed, this will be

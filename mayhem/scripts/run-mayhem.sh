@@ -126,7 +126,7 @@ docker push "${IMAGE_TAG}"
 ######################################################################
 
 sed -i "s|target:.*|target: $MAYHEM_TARGET|g" Mayhemfile
-sed -i "s|baseimage:.*|baseimage: $IMAGE_TAG|g" Mayhemfile
+sed -i "s|image:.*|image: $IMAGE_TAG|g" Mayhemfile
 
 ######################################################################
 # Clear pending runs
@@ -135,21 +135,21 @@ sed -i "s|baseimage:.*|baseimage: $IMAGE_TAG|g" Mayhemfile
 # to be started for the same target.
 #
 #  * mayhem show                         << get Mayhem runs
-#  * -n ${MAYHEM_ORGANIZATION}              << limit search to projects in the specified organization
+#  * --owner ${MAYHEM_ORGANIZATION}              << limit search to projects in the specified organization
 #  * --format csv                        << display in csv format
 #  * "^openssl/${MAYHEM_TARGET}(?i)/\d+" <<  case-insensitive regex filter by project/target/[run #]
 #  * grep -E "pending|running"           << filter for pending or running runs
 #  * cut -d"," -f1                       << get the run ID from the left-most column in the output
 #  * || true                             << Do not exit the script if no runs match
 ######################################################################
-RUNS_TO_STOP=$(${CLI} show -n ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true)
+RUNS_TO_STOP=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true)
 
 # Stop ALL running or pending runs for the selected target. This is required
 # so that the new run is not pending behind previoulsy queued run(s).
 if [[ -n "${RUNS_TO_STOP}" ]]; then
     for run in $RUNS_TO_STOP
     do
-        ${CLI} stop -n ${MAYHEM_ORGANIZATION} "${run}" || true
+        ${CLI} stop --owner ${MAYHEM_ORGANIZATION} "${run}" || true
     done
 fi
 
@@ -170,21 +170,21 @@ if [[ "${BRANCH_NAME}" = "${PRIMARY_BRANCH}" ]]; then
 else
     # Find the latest run on the primary branch to determine the project/target
     # from which to download test cases.
-    LATEST_PRIMARY_TARGET=$(${CLI} show -n ${MAYHEM_ORGANIZATION} --format csv "openssl/${MAYHEM_PRIMARY_TARGET}" | tail -n +2 | head -1 | cut -d"," -f1 | cut -d"/" -f"1,2"|| true)
+    LATEST_PRIMARY_TARGET=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "openssl/${MAYHEM_PRIMARY_TARGET}" | tail -n +2 | head -1 | cut -d"," -f1 | cut -d"/" -f"1,2"|| true)
     if [[ -n "${LATEST_PRIMARY_TARGET}" ]]; then
 
         # Create a folder to download primary test suite into. This is to avoid
         # overwriting the existing Mayhemfile and corpus directory.
         mkdir branch
         cd branch
-        ${CLI} download -n ${MAYHEM_ORGANIZATION} -o . "${LATEST_PRIMARY_TARGET}"
+        ${CLI} download --owner ${MAYHEM_ORGANIZATION} -o . "${LATEST_PRIMARY_TARGET}"
 
         # Replace the downloaded Mayhemfile with the one that was created for
         # the current branch
         cp ../Mayhemfile .
         # Run a new regression test using the tests downloaded from the primary
         # branch target on a target for this branch and wait for it to complete
-        ${CLI} wait -n ${MAYHEM_ORGANIZATION} --junit "${ROOT}/junit-results.xml" "$(${CLI} run --regression .)"
+        ${CLI} wait --owner ${MAYHEM_ORGANIZATION} --junit "${ROOT}/junit-results.xml" "$(${CLI} run --regression .)"
     fi
 fi
 
