@@ -144,7 +144,7 @@ sed -i "s|image:.*|image: $IMAGE_TAG|g" Mayhemfile
 #  * cut -d"," -f1                       << get the run ID from the left-most column in the output
 #  * || true                             << Do not exit the script if no runs match
 ######################################################################
-RUNS_TO_STOP=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true 2>/dev/null)
+RUNS_TO_STOP=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true)
 
 # Stop ALL running or pending runs for the selected target. This is required
 # so that the new run is not pending behind previoulsy queued run(s).
@@ -172,7 +172,7 @@ if [[ "${BRANCH_NAME}" = "${PRIMARY_BRANCH}" ]]; then
 else
     # Find the latest run on the primary branch to determine the project/target
     # from which to download test cases.
-    LATEST_PRIMARY_TARGET=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "openssl/${MAYHEM_PRIMARY_TARGET}" | tail -n +2 | head -1 | cut -d"," -f1 | cut -d"/" -f"1,2"|| true 2>/dev/null)
+    LATEST_PRIMARY_TARGET=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "openssl/${MAYHEM_PRIMARY_TARGET}" | tail -n +2 | head -1 | cut -d"," -f1 | cut -d"/" -f"1,2"|| true)
     if [[ -n "${LATEST_PRIMARY_TARGET}" ]]; then
 
         # Create a folder to download primary test suite into. This is to avoid
