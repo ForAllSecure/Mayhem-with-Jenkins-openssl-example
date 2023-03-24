@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-set -x
-
 #   Copyright (C) 2020 ForAllSecure, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -166,7 +164,7 @@ fi
 # and run those to see if crashes have been fixed/introduced compared
 # with the primary branch.
 ######################################################################
-if [[ "${BRANCH_NAME}" = "${BRANCH_NAME}" ]]; then
+if [[ "${BRANCH_NAME}" = "${PRIMARY_BRANCH}" ]]; then
     # Start a new continuous run
     ${CLI} run .
 else
