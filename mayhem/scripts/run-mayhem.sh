@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 #   Copyright (C) 2020 ForAllSecure, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -126,7 +128,7 @@ docker push "${IMAGE_TAG}"
 ######################################################################
 
 sed -i "s|target:.*|target: $MAYHEM_TARGET|g" Mayhemfile
-sed -i "s|baseimage:.*|baseimage: $IMAGE_TAG|g" Mayhemfile
+sed -i "s|image:.*|image: $IMAGE_TAG|g" Mayhemfile
 
 ######################################################################
 # Clear pending runs
