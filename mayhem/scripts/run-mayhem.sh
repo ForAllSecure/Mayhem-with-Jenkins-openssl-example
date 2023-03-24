@@ -144,7 +144,7 @@ sed -i "s|image:.*|image: $IMAGE_TAG|g" Mayhemfile
 #  * cut -d"," -f1                       << get the run ID from the left-most column in the output
 #  * || true                             << Do not exit the script if no runs match
 ######################################################################
-RUNS_TO_STOP=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true)
+RUNS_TO_STOP=$(${CLI} show --owner ${MAYHEM_ORGANIZATION} --format csv "^openssl/${MAYHEM_TARGET}(?i)/\d+" | grep -E "pending|running" | cut -d"," -f1 || true 2>/dev/null)
 
 # Stop ALL running or pending runs for the selected target. This is required
 # so that the new run is not pending behind previoulsy queued run(s).
