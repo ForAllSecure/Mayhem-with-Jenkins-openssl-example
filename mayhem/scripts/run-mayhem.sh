@@ -166,7 +166,7 @@ fi
 # and run those to see if crashes have been fixed/introduced compared
 # with the primary branch.
 ######################################################################
-if [[ "${BRANCH_NAME}" = "${PRIMARY_BRANCH}" ]]; then
+if [[ "${BRANCH_NAME}" = "${BRANCH_NAME}" ]]; then
     # Start a new continuous run
     ${CLI} run .
 else
